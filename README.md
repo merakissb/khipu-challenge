@@ -4,7 +4,7 @@
 ![Rails](https://img.shields.io/badge/Rails-8.0%2B-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-blueviolet)
 
-MVP con integración de pagos usando Khipu, diseñado para demostrar un flujo de compra **básico** pero completo. Un usuario puede autenticarse (usando devise gem), seleccionar productos, generar una orden de compra e iniciar el pago usando Khipu.
+MVP con integración de pagos usando Khipu, diseñado para demostrar un flujo de compra **básico** pero completo. Un usuario puede autenticarse (usando devise gem), seleccionar productos, generar una orden de compra e iniciar el pago usando Khipu. diseñado  para demostrar un flujo de compra, destacando la comprensión del ciclo de vida de una transacción en línea y la interacción entre frontend, backend y servicios externos.
 
 ## 🚀 Requisitos Técnicos
 
@@ -35,8 +35,6 @@ Contraseña: password123
 - **Implementar webhooks de Khipu para manejar pagos confirmados incluso si el cliente no regresa al sitio.**
 
 - **Agregar expiración automática a órdenes no pagadas**
-
-- **Enviar correos al confirmar pago o cancelar**
 
 - **Mejorar validaciones de datos**
 
