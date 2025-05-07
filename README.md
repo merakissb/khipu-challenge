@@ -22,4 +22,20 @@ cd [repo_name]
 bundle install
 rails db:create db:migrate db:seed
 rails server
-´´´
+
+Al ejecutar el seed (db:seed), se crea el siguiente usuario de pruebas:
+
+Email: user@example.com
+
+Contraseña: password123
+```
+
+## TODO
+
+- **Implementar webhooks de Khipu para manejar pagos confirmados incluso si el cliente no regresa al sitio.**
+
+- **Agregar expiración automática a órdenes no pagadas**
+
+- **Enviar correos al confirmar pago o cancelar**
+
+- **Mejorar validaciones de datos**
