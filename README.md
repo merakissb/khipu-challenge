@@ -1,24 +1,25 @@
-# README
+# 🛒 Challenge Khipu Payments
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+![Ruby](https://img.shields.io/badge/Ruby-3.2%2B-red)
+![Rails](https://img.shields.io/badge/Rails-8.0%2B-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-blueviolet)
 
-Things you may want to cover:
+MVP básico con integración a Khipu para procesamiento de pagos.
 
-* Ruby version
+## 🚀 Requisitos Técnicos
 
-* System dependencies
+- **Ruby** 3.2+
+- **Rails** 8.0+
+- **PostgreSQL** 15+
+- **Bundler** 2.4+
 
-* Configuration
+## 🛠 Configuración Inicial
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+bash
+git clone [repo_url]
+cd [repo_name]
+bundle install
+rails db:create db:migrate db:seed
+rails server
+´´´
