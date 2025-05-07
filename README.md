@@ -4,7 +4,7 @@
 ![Rails](https://img.shields.io/badge/Rails-8.0%2B-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-blueviolet)
 
-MVP básico con integración a Khipu para procesamiento de pagos.
+MVP con integración de pagos usando Khipu, diseñado para demostrar un flujo de compra **básico** pero completo. Un usuario puede autenticarse (usando devise gem), seleccionar productos, generar una orden de compra e iniciar el pago usando Khipu.
 
 ## 🚀 Requisitos Técnicos
 
