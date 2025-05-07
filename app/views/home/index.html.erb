@@ -1,0 +1,18 @@
+<!-- app/views/home/index.html.erb -->
+<h1>Productos Disponibles</h1>
+
+<% if user_signed_in? %>
+  <%= form_tag orders_path, method: :post, data: { turbo: false } do %>
+    <% @products.each do |product| %>
+      <div>
+        <h3><%= product.name %></h3>
+        <p>Precio: $<%= product.price %></p>
+        <%= check_box_tag "product_ids[]", product.id %>
+      </div>
+    <% end %>
+    <%= submit_tag "Comprar seleccionados" %>
+  <% end %>
+<% else %>
+  <p>Por favor inicia sesión para comprar</p>
+  <%= link_to "Iniciar sesión", new_user_session_path %>
+<% end %>

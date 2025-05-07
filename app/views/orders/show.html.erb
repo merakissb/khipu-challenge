@@ -1,0 +1,23 @@
+<h1>Orden #<%= @order.id %></h1>
+
+<p><strong>Estado:</strong> <%= @order.status %></p>
+
+<h2>Productos:</h2>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li>
+      <%= item.product.name %> - 
+      <%= item.quantity %> x $<%= item.unit_price %> = 
+      $<%= item.quantity * item.unit_price %>
+    </li>
+  <% end %>
+</ul>
+
+<p><strong>Total:</strong> $<%= @order.order_items.sum { |item| item.unit_price * item.quantity } %></p>
+
+<% if @order.status == 'pending' %>
+  <div class="alert alert-info">
+    Si ya realizaste el pago pero aún aparece como pendiente, 
+    <%= link_to 'haz clic aquí para actualizar', payment_success_order_path(@order) %>
+  </div>
+<% end %>
