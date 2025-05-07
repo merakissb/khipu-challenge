@@ -39,3 +39,5 @@ Contraseña: password123
 - **Enviar correos al confirmar pago o cancelar**
 
 - **Mejorar validaciones de datos**
+
+- **y mucho mas xD**
