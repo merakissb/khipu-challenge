@@ -1,18 +1,85 @@
 <!-- app/views/home/index.html.erb -->
-<h1>Productos Disponibles</h1>
+<div class="container mt-5">
+  <h3 class="mb-4">Productos Disponibles</h3>
 
-<% if user_signed_in? %>
-  <%= form_tag orders_path, method: :post, data: { turbo: false } do %>
-    <% @products.each do |product| %>
-      <div>
-        <h3><%= product.name %></h3>
-        <p>Precio: $<%= product.price %></p>
-        <%= check_box_tag "product_ids[]", product.id %>
+  <% if user_signed_in? %>
+    <%= form_tag orders_path, method: :post, data: { turbo: false }, class: "mb-5", id: "products-form" do %>
+      <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        <% @products.each do |product| %>
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="card-title"><%= product.name %></h3>
+                <p class="card-text">Precio: $<%= product.price %></p>
+                <div class="form-check">
+                  <%= check_box_tag "product_ids[]", product.id, false, 
+                      class: "form-check-input product-checkbox" %>
+                  <label class="form-check-label">Seleccionar</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Botón de submit como imagen -->
+        <button type="submit" 
+                id="submit-btn"
+                class="btn p-0 border-0 bg-transparent" 
+                disabled>
+          <img src="https://s3.amazonaws.com/static.khipu.com/buttons/chile/2024/banks-110x50.svg" 
+               alt="Comprar seleccionados" 
+               class="img-fluid"
+               style="max-width: 220px; transition: all 0.2s; opacity: 0.5;"
+               id="submit-image">
+        </button>
       </div>
     <% end %>
-    <%= submit_tag "Comprar seleccionados" %>
+
+    <script>
+      // Función para manejar la lógica de habilitación del botón
+      function setupCheckboxToggle() {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitImage = document.getElementById('submit-image');
+
+        if (!submitBtn) return;
+
+        function updateButtonState() {
+          const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+          submitBtn.disabled = !isChecked;
+          submitImage.style.opacity = isChecked ? '1' : '0.5';
+        }
+
+        // Evento para cada checkbox
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', updateButtonState);
+        });
+
+        // Evento hover solo si está habilitado
+        submitImage.addEventListener('mouseover', function() {
+          if (!submitBtn.disabled) {
+            this.style.transform = 'scale(1.05)';
+          }
+        });
+
+        submitImage.addEventListener('mouseout', function() {
+          this.style.transform = 'scale(1)';
+        });
+
+        // Estado inicial
+        updateButtonState();
+      }
+
+      // Ejecutar tanto en carga inicial como después de navegación Turbo
+      document.addEventListener('DOMContentLoaded', setupCheckboxToggle);
+      document.addEventListener('turbo:load', setupCheckboxToggle);
+    </script>
+  <% else %>
+    <div class="alert alert-warning">
+      <p class="mb-3">Por favor inicia sesión para comprar</p>
+      <%= link_to "Iniciar sesión", new_user_session_path, class: "btn btn-outline-primary" %>
+    </div>
   <% end %>
-<% else %>
-  <p>Por favor inicia sesión para comprar</p>
-  <%= link_to "Iniciar sesión", new_user_session_path %>
-<% end %>
+</div>

@@ -24,7 +24,15 @@ class OrdersController < ApplicationController
     return_url = payment_success_order_url(@order)
     cancel_url = payment_failed_order_url(@order)
 
-    response = KhipuService.create_payment(total_amount, subject, return_url, cancel_url)
+    # Usando el nuevo servicio de Khipu
+    payment_service = Khipu::CreatePaymentService.new(
+      amount: total_amount,
+      subject: subject,
+      return_url: return_url,
+      cancel_url: cancel_url
+    )
+    response = payment_service.call
+
     Rails.logger.info "RESPUESTA DE KHIPU: #{response.inspect}"
 
     if response["payment_url"]
@@ -44,14 +52,16 @@ class OrdersController < ApplicationController
     @order = current_user.orders.find(params[:id])
 
     begin
-      response = KhipuService.get_payment_status(@order.khipu_payment_id)
+      # Usando el nuevo servicio de Khipu
+      payment_status_service = Khipu::GetPaymentDetailsService.new(payment_id: @order.khipu_payment_id)
+      response = payment_status_service.call
+
       if response["status"] == "done"
         @order.update(status: :paid)
         flash[:notice] = "¡Pago realizado con éxito!"
       else
-        flash[:alert] = "Estamos verificando tu pago. Actualiza esta página en unos momentos."  # Si no se ha completado, mostramos un mensaje de espera
+        flash[:alert] = "Estamos verificando tu pago. Actualiza esta página en unos momentos."
       end
-      @order.update(status: :paid) if response["status"] == "done"
     rescue => e
       Rails.logger.error "Error verificando pago Khipu: #{e.message}"
     end
@@ -60,7 +70,20 @@ class OrdersController < ApplicationController
   end
 
   def payment_failed
-    @order.update(status: :failed)
+    begin
+      if @order.khipu_payment_id.present?
+        cancel_service = Khipu::CancelPaymentService.new(payment_id: @order.khipu_payment_id)
+        cancel_service.call
+      end
+
+      @order.update(status: :canceled)
+      flash[:alert] = "El pago fue cancelado o no se completó correctamente."
+    rescue => e
+      Rails.logger.error "Error al cancelar pago en Khipu: #{e.message}"
+      @order.update(status: :failed)
+      flash[:alert] = "El pago fue cancelado, pero hubo un error al notificar al proveedor de pagos."
+    end
+
     redirect_to @order
   end
 
