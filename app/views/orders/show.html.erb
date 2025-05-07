@@ -43,19 +43,12 @@
       </ul>
 
       <% if @order.pending? %>
-        <% if @order.expires_at > Time.current %>
-          <div class="d-flex gap-2">
-            <%= link_to 'Pagar ahora', @order.khipu_payment_url, class: "btn btn-primary" %>
-            <%= button_to 'Cancelar orden', order_path(@order), method: :delete, 
-                  data: { confirm: '¿Estás seguro que deseas cancelar esta orden? Esto no se puede deshacer.' }, 
-                  class: "btn btn-outline-danger" %>
-          </div>
-        <% else %>
-          <div class="alert alert-danger">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Este pago ha expirado. Por favor crea una nueva orden si deseas realizar el pago.
-          </div>
-        <% end %>
+        <div class="d-flex gap-2">
+        <%= link_to 'Pagar ahora', @order.khipu_payment_url, class: "btn btn-primary" %>
+        <%= button_to 'Cancelar orden', order_path(@order), method: :delete, 
+              data: { confirm: '¿Estás seguro que deseas cancelar esta orden? Esto no se puede deshacer.' }, 
+              class: "btn btn-outline-danger" %>
+        </div>
 
         <div class="alert alert-warning p-3 mt-3">
           <i class="bi bi-info-circle me-2"></i>

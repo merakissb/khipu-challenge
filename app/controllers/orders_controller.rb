@@ -24,7 +24,6 @@ class OrdersController < ApplicationController
     return_url = payment_success_order_url(@order)
     cancel_url = payment_failed_order_url(@order)
 
-    # Usando el nuevo servicio de Khipu
     payment_service = Khipu::CreatePaymentService.new(
       amount: total_amount,
       subject: subject,
@@ -32,8 +31,6 @@ class OrdersController < ApplicationController
       cancel_url: cancel_url
     )
     response = payment_service.call
-
-    Rails.logger.info "RESPUESTA DE KHIPU: #{response.inspect}"
 
     if response["payment_url"]
       @order.update(
@@ -52,13 +49,11 @@ class OrdersController < ApplicationController
     @order = current_user.orders.find(params[:id])
 
     begin
-      # Usando el nuevo servicio de Khipu
       payment_status_service = Khipu::GetPaymentDetailsService.new(payment_id: @order.khipu_payment_id)
       response = payment_status_service.call
 
       if response["status"] == "done"
         @order.update(status: :paid)
-        flash[:notice] = "¡Pago realizado con éxito!"
       else
         flash[:alert] = "Estamos verificando tu pago. Actualiza esta página en unos momentos."
       end
